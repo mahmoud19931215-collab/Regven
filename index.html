@@ -3,41 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Aleppo Space Game</title>
+    <title>Aleppo Space Game - Animated Night</title>
     <style>
-        /* إعدادات الشاشة الكاملة للموبايل */
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
             overflow: hidden;
             background-color: #000;
-            font-family: sans-serif;
         }
-
-        canvas {
-            display: block;
-        }
-
-        /* زر تجريبي للتحويل بين الليل والنهار */
-        #toggleBtn {
+        canvas { display: block; }
+        .controls {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        button {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 1px solid white;
-            border-radius: 5px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
             cursor: pointer;
-            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-    <button id="toggleBtn">تحويل (ليل/نهار)</button>
+    <div class="controls">
+        <button id="toggleBtn">تبديل الجو</button>
+    </div>
+
     <canvas id="gameCanvas"></canvas>
 
     <script>
@@ -45,38 +42,36 @@
         const ctx = canvas.getContext('2d');
         const btn = document.getElementById('toggleBtn');
 
-        let width, height;
-        let isDay = true;
-        let stars = [];
-        let clouds = [];
+        let width, height, isDay = false; // جعلناه يبدأ بالليل لنرى التأثير
+        let stars = [], clouds = [];
+        let moonX;
 
-        // ضبط حجم الشاشة
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            moonX = width * 0.8; // موقع القمر الابتدائي
             initElements();
         }
 
-        // إنشاء النجوم والغيوم
         function initElements() {
-            stars = [];
-            clouds = [];
-            // إنشاء 100 نجمة عشوائية لليل
-            for (let i = 0; i < 100; i++) {
+            stars = []; clouds = [];
+            // إنشاء نجوم بخصائص لمعان مختلفة
+            for (let i = 0; i < 150; i++) {
                 stars.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    size: Math.random() * 1.5,
-                    opacity: Math.random()
+                    size: Math.random() * 1.8,
+                    opacity: Math.random(),
+                    blinkSpeed: 0.01 + Math.random() * 0.03
                 });
             }
-            // إنشاء 5 غيوم للنهار
+            // غيوم للنهار
             for (let i = 0; i < 5; i++) {
                 clouds.push({
                     x: Math.random() * width,
                     y: Math.random() * (height / 2),
-                    speed: 0.2 + Math.random() * 0.5,
-                    size: 30 + Math.random() * 20
+                    speed: 0.2 + Math.random() * 0.4,
+                    size: 35
                 });
             }
         }
@@ -85,67 +80,63 @@
             ctx.clearRect(0, 0, width, height);
 
             if (isDay) {
-                // رسم سماء النهار (أزرق فاتح)
+                // سماء النهار
                 let grad = ctx.createLinearGradient(0, 0, 0, height);
                 grad.addColorStop(0, "#87CEEB");
-                grad.addColorStop(1, "#E0F7FA");
+                grad.addColorStop(1, "#B2EBF2");
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, width, height);
 
-                // رسم الغيوم
+                // رسم وحركة الغيوم
                 ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-                clouds.forEach(cloud => {
+                clouds.forEach(c => {
                     ctx.beginPath();
-                    ctx.arc(cloud.x, cloud.y, cloud.size, 0, Math.PI * 2);
-                    ctx.arc(cloud.x + 25, cloud.y - 10, cloud.size, 0, Math.PI * 2);
-                    ctx.arc(cloud.x + 50, cloud.y, cloud.size, 0, Math.PI * 2);
+                    ctx.arc(c.x, c.y, c.size, 0, Math.PI*2);
+                    ctx.arc(c.x+30, c.y-10, c.size, 0, Math.PI*2);
+                    ctx.arc(c.x+60, c.y, c.size, 0, Math.PI*2);
                     ctx.fill();
-                    
-                    // تحريك الغيوم
-                    cloud.x += cloud.speed;
-                    if (cloud.x > width + 100) cloud.x = -100;
+                    c.x += c.speed;
+                    if (c.x > width + 100) c.x = -150;
                 });
-
             } else {
-                // رسم سماء الليل (أسود دافئ)
+                // سماء الليل الدافئة
                 let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#050505");
-                grad.addColorStop(1, "#1a1a2e");
+                grad.addColorStop(0, "#020205");
+                grad.addColorStop(1, "#0f0c29");
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, width, height);
 
-                // رسم النجوم
-                stars.forEach(star => {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                    ctx.fill();
+                // رسم وحركة النجوم (تأثير اللمعان)
+                stars.forEach(s => {
+                    s.opacity += s.blinkSpeed;
+                    if (s.opacity > 1 || s.opacity < 0.2) s.blinkSpeed *= -1;
                     
-                    // تأثير لمعان بسيط
-                    star.opacity += (Math.random() - 0.5) * 0.05;
-                    if (star.opacity < 0) star.opacity = 0;
-                    if (star.opacity > 1) star.opacity = 1;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                    ctx.fill();
                 });
 
-                // رسم القمر
-                ctx.fillStyle = "#fdfdfd";
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = "white";
+                // رسم وحركة القمر ببطء
+                ctx.save();
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
+                ctx.fillStyle = "#f5f5f5";
                 ctx.beginPath();
-                ctx.arc(width - 80, 80, 40, 0, Math.PI * 2);
+                ctx.arc(moonX, 100, 40, 0, Math.PI*2);
                 ctx.fill();
-                ctx.shadowBlur = 0; // إعادة الظل للصفر لبقية العناصر
+                ctx.restore();
+
+                moonX -= 0.05; // سرعة حركة القمر (بطيئة جداً للواقعية)
+                if (moonX < -50) moonX = width + 50;
             }
 
             requestAnimationFrame(draw);
         }
 
-        // التغيير عند الضغط على الزر
-        btn.addEventListener('click', () => {
-            isDay = !isDay;
-        });
-
+        btn.addEventListener('click', () => isDay = !isDay);
         window.addEventListener('resize', resize);
+        
         resize();
         draw();
     </script>
