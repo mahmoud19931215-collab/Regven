@@ -1,10 +1,9 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const player = document.getElementById('player');
 
 let width, height, isDay = false; 
 let stars = [], clouds = [];
-let moonX;
+let moonX; 
 
 function resize() {
     width = canvas.width = window.innerWidth;
@@ -37,18 +36,13 @@ function initElements() {
 function toggleMode() {
     isDay = !isDay;
     const styleLink = document.getElementById('theme-style');
-    styleLink.href = isDay ? "style.css" : "style2.css";
+    if (isDay) {
+        styleLink.href = "style.css";
+    } else {
+        styleLink.href = "style2.css";
+    }
     initElements();
 }
-
-// كود تحريك المركبة باللمس أو الماوس
-window.addEventListener('mousemove', (e) => {
-    player.style.left = e.clientX + 'px';
-});
-
-window.addEventListener('touchmove', (e) => {
-    player.style.left = e.touches[0].clientX + 'px';
-});
 
 function draw() {
     ctx.clearRect(0, 0, width, height);
@@ -87,7 +81,8 @@ function draw() {
         });
 
         ctx.save();
-        ctx.shadowBlur = 30; ctx.shadowColor = "white";
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = "white";
         ctx.fillStyle = "#fff";
         ctx.beginPath();
         ctx.arc(moonX, 120, 50, 0, Math.PI*2);
