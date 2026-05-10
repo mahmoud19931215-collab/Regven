@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-let width, height, isDay = false;
+let width, height, isDay = false; 
 let stars = [], clouds = [];
 
 function resize() {
@@ -12,6 +12,7 @@ function resize() {
 
 function initElements() {
     stars = []; clouds = [];
+    // نجوم الليل
     for (let i = 0; i < 120; i++) {
         stars.push({
             x: Math.random() * width,
@@ -21,6 +22,7 @@ function initElements() {
             speed: 0.01 + Math.random() * 0.02
         });
     }
+    // غيوم النهار (التي أعجبتك ألوانها)
     for (let i = 0; i < 5; i++) {
         clouds.push({
             x: Math.random() * width,
@@ -31,9 +33,9 @@ function initElements() {
     }
 }
 
+// دالة التبديل المرتبطة بالزر في ملف الـ HTML
 function toggleMode() {
     isDay = !isDay;
-    // تم حذف سطر statusEl لأنه غير موجود في الـ HTML
     initElements();
 }
 
@@ -41,6 +43,7 @@ function draw() {
     ctx.clearRect(0, 0, width, height);
 
     if (isDay) {
+        // ألوان النهار الثابتة (التي طلبت عدم تعديلها)
         let grad = ctx.createLinearGradient(0, 0, 0, height);
         grad.addColorStop(0, "#4facfe");
         grad.addColorStop(1, "#00f2fe");
@@ -58,6 +61,7 @@ function draw() {
             if (c.x > width + 100) c.x = -150;
         });
     } else {
+        // وضع الليل
         let grad = ctx.createLinearGradient(0, 0, 0, height);
         grad.addColorStop(0, "#090909");
         grad.addColorStop(1, "#201c2c");
@@ -73,6 +77,7 @@ function draw() {
             ctx.fill();
         });
 
+        // القمر
         ctx.fillStyle = "#fff";
         ctx.shadowBlur = 20; ctx.shadowColor = "white";
         ctx.beginPath();
