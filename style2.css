@@ -1,1 +1,32 @@
 
+/* وضع الليل المطور */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #050508; /* أسود فضائي أعمق */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+canvas {
+    display: block;
+}
+
+.btn-toggle {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    cursor: pointer;
+}
