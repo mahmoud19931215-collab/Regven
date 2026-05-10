@@ -3,91 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Aleppo Space Game - Animated Night</title>
+    
+    <!-- إعدادات التطبيق للموبايل -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="لعبة حلب">
+    
+    <title>Aleppo Space Game</title>
     <style>
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             overflow: hidden;
             background-color: #000;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         canvas { display: block; }
-        .controls {
+        
+        /* واجهة المستخدم */
+        #ui {
             position: absolute;
-            bottom: 20px; left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-        }
-        button {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
+            top: 10px; width: 100%;
+            display: flex;
+            justify-content: space-around;
             color: white;
-            border: 1px solid white;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            pointer-events: none;
+        }
+
+        .btn-toggle {
+            position: absolute;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <button id="toggleBtn">تبديل الجو</button>
+    <div id="ui">
+        <div>النقاط: <span id="score">0</span></div>
+        <div>الحالة: <span id="status">ليل</span></div>
     </div>
 
+    <button class="btn-toggle" onclick="toggleMode()">تبديل الوقت</button>
     <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const btn = document.getElementById('toggleBtn');
+        const scoreEl = document.getElementById('score');
+        const statusEl = document.getElementById('status');
 
-        let width, height, isDay = false; // جعلناه يبدأ بالليل لنرى التأثير
+        let width, height, isDay = false;
         let stars = [], clouds = [];
-        let moonX;
+        let score = 0;
 
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            moonX = width * 0.8; // موقع القمر الابتدائي
             initElements();
         }
 
         function initElements() {
             stars = []; clouds = [];
-            // إنشاء نجوم بخصائص لمعان مختلفة
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < 120; i++) {
                 stars.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    size: Math.random() * 1.8,
+                    size: Math.random() * 1.5,
                     opacity: Math.random(),
-                    blinkSpeed: 0.01 + Math.random() * 0.03
+                    speed: 0.01 + Math.random() * 0.02
                 });
             }
-            // غيوم للنهار
             for (let i = 0; i < 5; i++) {
                 clouds.push({
                     x: Math.random() * width,
-                    y: Math.random() * (height / 2),
-                    speed: 0.2 + Math.random() * 0.4,
-                    size: 35
+                    y: Math.random() * (height / 3),
+                    speed: 0.3 + Math.random() * 0.5,
+                    size: 40
                 });
             }
+        }
+
+        function toggleMode() {
+            isDay = !isDay;
+            statusEl.innerText = isDay ? "نهار" : "ليل";
+            score += 10;
+            scoreEl.innerText = score;
         }
 
         function draw() {
             ctx.clearRect(0, 0, width, height);
 
             if (isDay) {
-                // سماء النهار
                 let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#87CEEB");
-                grad.addColorStop(1, "#B2EBF2");
+                grad.addColorStop(0, "#4facfe");
+                grad.addColorStop(1, "#00f2fe");
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, width, height);
 
-                // رسم وحركة الغيوم
                 ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
                 clouds.forEach(c => {
                     ctx.beginPath();
@@ -99,44 +122,34 @@
                     if (c.x > width + 100) c.x = -150;
                 });
             } else {
-                // سماء الليل الدافئة
                 let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#020205");
-                grad.addColorStop(1, "#0f0c29");
+                grad.addColorStop(0, "#090909");
+                grad.addColorStop(1, "#201c2c");
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, width, height);
 
-                // رسم وحركة النجوم (تأثير اللمعان)
                 stars.forEach(s => {
-                    s.opacity += s.blinkSpeed;
-                    if (s.opacity > 1 || s.opacity < 0.2) s.blinkSpeed *= -1;
-                    
+                    s.opacity += s.speed;
+                    if (s.opacity > 1 || s.opacity < 0.2) s.speed *= -1;
                     ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
                     ctx.fill();
                 });
 
-                // رسم وحركة القمر ببطء
-                ctx.save();
-                ctx.shadowBlur = 25;
-                ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
-                ctx.fillStyle = "#f5f5f5";
+                // القمر
+                ctx.fillStyle = "#fff";
+                ctx.shadowBlur = 20; ctx.shadowColor = "white";
                 ctx.beginPath();
-                ctx.arc(moonX, 100, 40, 0, Math.PI*2);
+                ctx.arc(width - 70, 70, 30, 0, Math.PI*2);
                 ctx.fill();
-                ctx.restore();
-
-                moonX -= 0.05; // سرعة حركة القمر (بطيئة جداً للواقعية)
-                if (moonX < -50) moonX = width + 50;
+                ctx.shadowBlur = 0;
             }
 
             requestAnimationFrame(draw);
         }
 
-        btn.addEventListener('click', () => isDay = !isDay);
         window.addEventListener('resize', resize);
-        
         resize();
         draw();
     </script>
