@@ -10,148 +10,15 @@
     <meta name="apple-mobile-web-app-title" content="لعبة حلب">
     
     <title>Aleppo Space Game</title>
-    <style>
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        canvas { display: block; }
-        
-        /* واجهة المستخدم */
-        #ui {
-            position: absolute;
-            top: 10px; width: 100%;
-            display: flex;
-            justify-content: space-around;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            pointer-events: none;
-        }
-
-        .btn-toggle {
-            position: absolute;
-            bottom: 30px; left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="ui">
-        <div>النقاط: <span id="score">0</span></div>
-        <div>الحالة: <span id="status">ليل</span></div>
-    </div>
-
+    
     <button class="btn-toggle" onclick="toggleMode()">تبديل الوقت</button>
     <canvas id="gameCanvas"></canvas>
+    <script src="script.js"></script>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreEl = document.getElementById('score');
-        const statusEl = document.getElementById('status');
-
-        let width, height, isDay = false;
-        let stars = [], clouds = [];
-        let score = 0;
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initElements();
-        }
-
-        function initElements() {
-            stars = []; clouds = [];
-            for (let i = 0; i < 120; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    size: Math.random() * 1.5,
-                    opacity: Math.random(),
-                    speed: 0.01 + Math.random() * 0.02
-                });
-            }
-            for (let i = 0; i < 5; i++) {
-                clouds.push({
-                    x: Math.random() * width,
-                    y: Math.random() * (height / 3),
-                    speed: 0.3 + Math.random() * 0.5,
-                    size: 40
-                });
-            }
-        }
-
-        function toggleMode() {
-            isDay = !isDay;
-            statusEl.innerText = isDay ? "نهار" : "ليل";
-            score += 10;
-            scoreEl.innerText = score;
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, width, height);
-
-            if (isDay) {
-                let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#4facfe");
-                grad.addColorStop(1, "#00f2fe");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, width, height);
-
-                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-                clouds.forEach(c => {
-                    ctx.beginPath();
-                    ctx.arc(c.x, c.y, c.size, 0, Math.PI*2);
-                    ctx.arc(c.x+30, c.y-10, c.size, 0, Math.PI*2);
-                    ctx.arc(c.x+60, c.y, c.size, 0, Math.PI*2);
-                    ctx.fill();
-                    c.x += c.speed;
-                    if (c.x > width + 100) c.x = -150;
-                });
-            } else {
-                let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#090909");
-                grad.addColorStop(1, "#201c2c");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, width, height);
-
-                stars.forEach(s => {
-                    s.opacity += s.speed;
-                    if (s.opacity > 1 || s.opacity < 0.2) s.speed *= -1;
-                    ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
-                    ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
-                    ctx.fill();
-                });
-
-                // القمر
-                ctx.fillStyle = "#fff";
-                ctx.shadowBlur = 20; ctx.shadowColor = "white";
-                ctx.beginPath();
-                ctx.arc(width - 70, 70, 30, 0, Math.PI*2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
-
-            requestAnimationFrame(draw);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-        draw();
-    </script>
+    
 </body>
 </html>
