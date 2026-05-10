@@ -1,0 +1,33 @@
+/* زر الإعدادات */
+.settings-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    transition: transform 0.4s ease;
+}
+
+/* حركة الدوران عند الوقوف عليه بالماوس */
+.settings-btn:hover {
+    transform: rotate(90deg);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* شكل الترس باستخدام SVG لضمان الجودة */
+.settings-icon {
+    width: 25px;
+    height: 25px;
+    fill: white;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+}
