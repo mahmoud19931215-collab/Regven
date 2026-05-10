@@ -1,35 +1,40 @@
+/* وضع النهار النهائي - ممنوع التعديل */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #4facfe; /* لون أساسي نهاري */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        canvas { display: block; }
-        
-        /* واجهة المستخدم */
-        #ui {
-            position: absolute;
-            top: 10px; width: 100%;
-            display: flex;
-            justify-content: space-around;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            pointer-events: none;
-        }
+canvas {
+    display: block;
+}
 
-        .btn-toggle {
-            position: absolute;
-            bottom: 30px; left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-        }
+/* واجهة المستخدم - الزر الخاص بالتبديل */
+.btn-toggle {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+}
+
+.btn-toggle:active {
+    background: rgba(255, 255, 255, 0.4);
+}
