@@ -1,11 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// جعل المتغير عالمياً ليراه ملف star.js
-window.isDay = false; 
-let width, height;
-let stars = [], clouds = [];
-let moonX; 
+
 
 function resize() {
     width = canvas.width = window.innerWidth;
