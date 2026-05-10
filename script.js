@@ -1,20 +1,20 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const player = document.getElementById('player');
 
 let width, height, isDay = false; 
 let stars = [], clouds = [];
-let moonX; // متغير لموقع القمر
+let moonX;
 
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-    moonX = width * 0.8; // موقع البداية للقمر
+    moonX = width * 0.8;
     initElements();
 }
 
 function initElements() {
     stars = []; clouds = [];
-    // نجوم الليل
     for (let i = 0; i < 150; i++) {
         stars.push({
             x: Math.random() * width,
@@ -24,7 +24,6 @@ function initElements() {
             speed: 0.008 + Math.random() * 0.02
         });
     }
-    // غيوم النهار الثابتة
     for (let i = 0; i < 5; i++) {
         clouds.push({
             x: Math.random() * width,
@@ -37,23 +36,24 @@ function initElements() {
 
 function toggleMode() {
     isDay = !isDay;
-    
-    // تبديل ملف الـ CSS برمجياً
     const styleLink = document.getElementById('theme-style');
-    if (isDay) {
-        styleLink.href = "style.css";
-    } else {
-        styleLink.href = "style2.css";
-    }
-    
+    styleLink.href = isDay ? "style.css" : "style2.css";
     initElements();
 }
+
+// كود تحريك المركبة باللمس أو الماوس
+window.addEventListener('mousemove', (e) => {
+    player.style.left = e.clientX + 'px';
+});
+
+window.addEventListener('touchmove', (e) => {
+    player.style.left = e.touches[0].clientX + 'px';
+});
 
 function draw() {
     ctx.clearRect(0, 0, width, height);
 
     if (isDay) {
-        // نهار (ألوانك المفضلة)
         let grad = ctx.createLinearGradient(0, 0, 0, height);
         grad.addColorStop(0, "#4facfe");
         grad.addColorStop(1, "#00f2fe");
@@ -71,7 +71,6 @@ function draw() {
             if (c.x > width + 100) c.x = -150;
         });
     } else {
-        // ليل مطور
         let grad = ctx.createLinearGradient(0, 0, 0, height);
         grad.addColorStop(0, "#020205");
         grad.addColorStop(1, "#101025");
@@ -87,20 +86,17 @@ function draw() {
             ctx.fill();
         });
 
-        // القمر الكبير المتحرك مع توهج
         ctx.save();
-        ctx.shadowBlur = 30;
-        ctx.shadowColor = "white";
+        ctx.shadowBlur = 30; ctx.shadowColor = "white";
         ctx.fillStyle = "#fff";
         ctx.beginPath();
-        ctx.arc(moonX, 120, 50, 0, Math.PI*2); // كبرنا الحجم لـ 50
+        ctx.arc(moonX, 120, 50, 0, Math.PI*2);
         ctx.fill();
         ctx.restore();
 
-        moonX -= 0.05; // حركة بطيئة جداً للقمر لليسار
+        moonX -= 0.05;
         if (moonX < -60) moonX = width + 60;
     }
-
     requestAnimationFrame(draw);
 }
 
