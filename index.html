@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
+    <!-- إعدادات التطبيق للموبايل -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <title>فضاء حلب</title>
+    <meta name="apple-mobile-web-app-title" content="لعبة حلب">
+    
+    <title>Aleppo Space Game</title>
     <style>
         body, html {
             margin: 0; padding: 0;
@@ -20,53 +21,51 @@
         }
         canvas { display: block; }
         
-        /* تصميم الزر العصري */
-        .ui-container {
+        /* واجهة المستخدم */
+        #ui {
             position: absolute;
-            bottom: 40px;
-            width: 100%;
+            top: 10px; width: 100%;
             display: flex;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        #toggleBtn {
-            padding: 15px 35px;
-            font-size: 18px;
-            font-family: sans-serif;
-            font-weight: bold;
+            justify-content: space-around;
             color: white;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+            pointer-events: none;
         }
 
-        #toggleBtn:active {
-            transform: scale(0.92);
-            background: rgba(255, 255, 255, 0.3);
+        .btn-toggle {
+            position: absolute;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
 
-    <div class="ui-container">
-        <button id="toggleBtn">تبديل الوقت</button>
+    <div id="ui">
+        <div>النقاط: <span id="score">0</span></div>
+        <div>الحالة: <span id="status">ليل</span></div>
     </div>
 
+    <button class="btn-toggle" onclick="toggleMode()">تبديل الوقت</button>
     <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const btn = document.getElementById('toggleBtn');
+        const scoreEl = document.getElementById('score');
+        const statusEl = document.getElementById('status');
 
         let width, height, isDay = false;
         let stars = [], clouds = [];
+        let score = 0;
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -76,23 +75,30 @@
 
         function initElements() {
             stars = []; clouds = [];
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < 120; i++) {
                 stars.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    size: Math.random() * 1.6,
+                    size: Math.random() * 1.5,
                     opacity: Math.random(),
-                    speed: 0.005 + Math.random() * 0.02
+                    speed: 0.01 + Math.random() * 0.02
                 });
             }
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 5; i++) {
                 clouds.push({
                     x: Math.random() * width,
                     y: Math.random() * (height / 3),
-                    speed: 0.2 + Math.random() * 0.5,
-                    size: 35
+                    speed: 0.3 + Math.random() * 0.5,
+                    size: 40
                 });
             }
+        }
+
+        function toggleMode() {
+            isDay = !isDay;
+            statusEl.innerText = isDay ? "نهار" : "ليل";
+            score += 10;
+            scoreEl.innerText = score;
         }
 
         function draw() {
@@ -100,8 +106,8 @@
 
             if (isDay) {
                 let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#87CEEB");
-                grad.addColorStop(1, "#E0F7FA");
+                grad.addColorStop(0, "#4facfe");
+                grad.addColorStop(1, "#00f2fe");
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, width, height);
 
@@ -109,7 +115,7 @@
                 clouds.forEach(c => {
                     ctx.beginPath();
                     ctx.arc(c.x, c.y, c.size, 0, Math.PI*2);
-                    ctx.arc(c.x+30, c.y-12, c.size, 0, Math.PI*2);
+                    ctx.arc(c.x+30, c.y-10, c.size, 0, Math.PI*2);
                     ctx.arc(c.x+60, c.y, c.size, 0, Math.PI*2);
                     ctx.fill();
                     c.x += c.speed;
@@ -117,8 +123,8 @@
                 });
             } else {
                 let grad = ctx.createLinearGradient(0, 0, 0, height);
-                grad.addColorStop(0, "#050508");
-                grad.addColorStop(1, "#1a1a2e");
+                grad.addColorStop(0, "#090909");
+                grad.addColorStop(1, "#201c2c");
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, width, height);
 
@@ -131,20 +137,17 @@
                     ctx.fill();
                 });
 
+                // القمر
                 ctx.fillStyle = "#fff";
-                ctx.shadowBlur = 15; ctx.shadowColor = "white";
+                ctx.shadowBlur = 20; ctx.shadowColor = "white";
                 ctx.beginPath();
-                ctx.arc(width * 0.8, 80, 35, 0, Math.PI*2);
+                ctx.arc(width - 70, 70, 30, 0, Math.PI*2);
                 ctx.fill();
                 ctx.shadowBlur = 0;
             }
+
             requestAnimationFrame(draw);
         }
-
-        // تفعيل الزر
-        btn.addEventListener('click', () => {
-            isDay = !isDay;
-        });
 
         window.addEventListener('resize', resize);
         resize();
