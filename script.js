@@ -3,26 +3,28 @@ const ctx = canvas.getContext('2d');
 
 let width, height, isDay = false; 
 let stars = [], clouds = [];
+let moonX; // متغير لموقع القمر
 
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    moonX = width * 0.8; // موقع البداية للقمر
     initElements();
 }
 
 function initElements() {
     stars = []; clouds = [];
     // نجوم الليل
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 150; i++) {
         stars.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            size: Math.random() * 1.5,
+            size: Math.random() * 1.8,
             opacity: Math.random(),
-            speed: 0.01 + Math.random() * 0.02
+            speed: 0.008 + Math.random() * 0.02
         });
     }
-    // غيوم النهار (التي أعجبتك ألوانها)
+    // غيوم النهار الثابتة
     for (let i = 0; i < 5; i++) {
         clouds.push({
             x: Math.random() * width,
@@ -33,9 +35,17 @@ function initElements() {
     }
 }
 
-// دالة التبديل المرتبطة بالزر في ملف الـ HTML
 function toggleMode() {
     isDay = !isDay;
+    
+    // تبديل ملف الـ CSS برمجياً
+    const styleLink = document.getElementById('theme-style');
+    if (isDay) {
+        styleLink.href = "style.css";
+    } else {
+        styleLink.href = "style2.css";
+    }
+    
     initElements();
 }
 
@@ -43,7 +53,7 @@ function draw() {
     ctx.clearRect(0, 0, width, height);
 
     if (isDay) {
-        // ألوان النهار الثابتة (التي طلبت عدم تعديلها)
+        // نهار (ألوانك المفضلة)
         let grad = ctx.createLinearGradient(0, 0, 0, height);
         grad.addColorStop(0, "#4facfe");
         grad.addColorStop(1, "#00f2fe");
@@ -61,10 +71,10 @@ function draw() {
             if (c.x > width + 100) c.x = -150;
         });
     } else {
-        // وضع الليل
+        // ليل مطور
         let grad = ctx.createLinearGradient(0, 0, 0, height);
-        grad.addColorStop(0, "#090909");
-        grad.addColorStop(1, "#201c2c");
+        grad.addColorStop(0, "#020205");
+        grad.addColorStop(1, "#101025");
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
 
@@ -77,13 +87,18 @@ function draw() {
             ctx.fill();
         });
 
-        // القمر
+        // القمر الكبير المتحرك مع توهج
+        ctx.save();
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = "white";
         ctx.fillStyle = "#fff";
-        ctx.shadowBlur = 20; ctx.shadowColor = "white";
         ctx.beginPath();
-        ctx.arc(width - 70, 70, 30, 0, Math.PI*2);
+        ctx.arc(moonX, 120, 50, 0, Math.PI*2); // كبرنا الحجم لـ 50
         ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.restore();
+
+        moonX -= 0.05; // حركة بطيئة جداً للقمر لليسار
+        if (moonX < -60) moonX = width + 60;
     }
 
     requestAnimationFrame(draw);
