@@ -19,19 +19,31 @@
 </div>
 
 
-   <div id="mediaCard" class="media-card-container" style="display: none;">
-    <button class="close-card-btn" onclick="closeMediaCard()">إغلاق</button>
-    
+  <div id="mediaCard" class="media-card-container">
     <video id="cardVideo" class="media-content" playsinline>
-        <source src="https://dn790009.ca.archive.org/0/items/the-looney-tunes-show-season-2-of-2-mkv/The%20Looney%20Tunes%20Show%20-%20S02E01%20-%20Bobcats%20On%20Three.mp4" type="video/mp4">
+        <source src="رابط_الفيديو_هنا" type="video/mp4">
     </video>
 
-    <div class="controls-container">
-        <button class="control-btn" onclick="playVideo()">▶️</button>
-        <button class="control-btn" onclick="pauseVideo()">⏸</button>
-        <button class="control-btn" onclick="toggleMute()">🔊</button>
+    <div class="yt-controls">
+        <div class="progress-area" onclick="seekVideo(event)">
+            <div id="videoProgress" class="progress-bar"></div>
+        </div>
+
+        <div class="buttons-row">
+            <button class="yt-btn" onclick="playVideo()">▶️</button>
+            <button class="yt-btn" onclick="pauseVideo()">⏸</button>
+            
+            <div class="volume-container">
+                <button class="yt-btn" onclick="toggleMute()">🔊</button>
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.1" oninput="changeVolume(this.value)">
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+    
     <button class="btn-toggle" onclick="toggleMode()">تبديل الوقت</button>
     <canvas id="gameCanvas"></canvas>
     
