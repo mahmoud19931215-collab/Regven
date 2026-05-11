@@ -1,17 +1,16 @@
 <div id="mediaCard" class="media-card-container">
-    <video id="cardVideo" class="media-content" playsinline>
+    <video id="cardVideo" class="media-content" playsinline loop>
         <source src="رابط_الفيديو_هنا" type="video/mp4">
     </video>
 
-    <button id="mainToggleBtn" class="central-play-btn" onclick="togglePlay()">▶️</button>
-
     <div class="yt-controls">
-        <div class="progress-container">
-            <span id="timeCounter" class="time-display">00:00 / 00:00</span>
-            
-            <div class="progress-area" onclick="seekVideo(event)">
-                <div id="videoProgress" class="progress-bar"></div>
-            </div>
+        <div class="progress-area" onclick="seekVideo(event)">
+            <div id="videoProgress" class="progress-bar"></div>
+        </div>
+        
+        <div class="controls-row">
+            <button class="play-pause-btn" onclick="togglePlay()" id="playIcon">▶</button>
+            <span id="timeCounter" style="font-size: 13px; letter-spacing: 1px;">00:00</span>
         </div>
     </div>
 </div>
