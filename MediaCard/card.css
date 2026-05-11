@@ -1,63 +1,87 @@
-/* تنسيق الكرت الاستعراضي بالحواف المنحنية */
+/* حاوية الكرت الاستعراضي */
 .media-card-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90vw; /* جعلناه أصغر قليلاً من العرض الكامل ليظهر الانحناء */
+    width: 95vw; 
     height: 66.66vh;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 30px; /* انحناء الحواف */
+    background: #000;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end; /* لضمان بقاء أدوات التحكم في الأسفل */
     overflow: hidden;
     z-index: 1500;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* تنسيق الميديا ليتناسب مع الحواف المنحنية */
 .media-content {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-radius: 30px;
+    object-fit: contain; /* ليظهر الفيديو كاملاً دون قص */
 }
 
-/* حاوية أزرار التحكم */
-.controls-container {
-    position: absolute;
-    bottom: 20px;
+/* لوحة تحكم تشبه يوتيوب */
+.yt-controls {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 10px 0;
     display: flex;
-    gap: 15px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 20px;
-    border-radius: 50px;
-    backdrop-filter: blur(5px);
+    flex-direction: column;
+    align-items: center;
+    z-index: 1600;
 }
 
-.control-btn {
+/* شريط تقدم الفيديو */
+.progress-area {
+    width: 95%;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #f00; /* أحمر يوتيوب */
+    position: relative;
+}
+
+/* صف الأزرار والصوت */
+.buttons-row {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.yt-btn {
     background: none;
     border: none;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
-    padding: 5px;
+    display: flex;
+    align-items: center;
 }
 
-.close-card-btn {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(255, 0, 0, 0.6);
-    border: none;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 15px;
+/* شريط الصوت */
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.volume-slider {
+    width: 80px;
     cursor: pointer;
-    z-index: 1600;
+    accent-color: white;
 }
