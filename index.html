@@ -19,10 +19,18 @@
 </div>
 
 
-<div id="mediaCard" class="media-card-container" onclick="togglePlay()">
-    <video id="cardVideo" class="media-content" playsinline loop muted>
-        <source src="رابط_الفيديو_هنا" type="video/mp4">
-    </video>
+<div id="mediaCard" class="media-card-container">
+    <video id="cardVideo" class="media-content" playsinline loop>
+        </video>
+
+    <div class="yt-controls">
+        <div class="control-circle" onclick="togglePlay()" id="playBtn">
+            ▶
+        </div>
+        <div class="control-circle" onclick="toggleMute()" id="muteBtn">
+            🔊
+        </div>
+    </div>
 </div>
 
     
