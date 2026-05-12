@@ -21,10 +21,16 @@ async function loadProducts() {
 
             card.innerHTML = `
                 <div class="video-container">
-                    <video preload="metadata" muted loop onmouseover="this.play()" onmouseout="this.pause()" playsinline>
-                        <source src="${item.video}" type="video/mp4">
+                  // نعدل السطر الخاص بالـ video ليصبح:
+<video preload="auto" autoplay muted loop playsinline poster="loading_image.jpg">
+    <source src="${item.video}" type="video/mp4">
                         متصفحك لا يدعم الفيديو
                     </video>
+
+
+
+
+                    
                 </div>
                 <div class="card-details">
                     <h4>${item.title}</h4>
