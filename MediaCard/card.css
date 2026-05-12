@@ -1,14 +1,14 @@
 /* تنسيق كرت المنتج */
 .media-card {
+    width: 92%; /* بياخد عرض الموبايل مع ترك مسافة بسيطة من الطرفين */
+    max-width: 400px; /* لحتى ما يطلع ضخم على الشاشات الكبيرة */
+    margin: 15px auto; /* توسيط الكرت */
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    margin: 15px;
-    padding: 10px;
+    backdrop-filter: blur(12px); /* زيادة التأثير البلوري */
+    -webkit-backdrop-filter: blur(12px); 
+    border-radius: 25px; /* حواف أنعم */
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    overflow: hidden;
-    transition: transform 0.3s;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .media-card:hover {
@@ -17,8 +17,8 @@
 
 .video-container video {
     width: 100%;
-    border-radius: 10px;
-    display: block;
+    border-radius: 20px 20px 0 0; /* الحواف العلوية فقط مدورة لتناسب الكرت */
+    object-fit: cover; /* لضمان ملء المساحة بشكل جميل */
 }
 
 .card-details {
