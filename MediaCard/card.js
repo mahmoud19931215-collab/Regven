@@ -55,3 +55,41 @@ function sendOrder(productName) {
 
 // تشغيل الدالة عند تحميل الصفحة
 window.addEventListener('DOMContentLoaded', loadProducts);
+
+
+
+
+let allProducts = []; // لحفظ الـ 3000 منتج
+let currentIndex = 0;
+const PAGE_SIZE = 20;
+
+async function loadProducts() {
+    const response = await fetch(SCRIPT_URL);
+    allProducts = await response.json();
+    displayNextBatch(); // عرض أول 20
+}
+
+function displayNextBatch() {
+    const container = document.getElementById('products-container');
+    const nextBatch = allProducts.slice(currentIndex, currentIndex + PAGE_SIZE);
+    
+    nextBatch.forEach(item => {
+        const card = createMediaCard(item); // دالة إنشاء الكرت
+        container.appendChild(card);
+    });
+    
+    currentIndex += PAGE_SIZE;
+}
+
+// مراقبة التمرير (السكروول) لتحميل المزيد
+document.getElementById('shop-overlay').addEventListener('scroll', function(e) {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+        if (currentIndex < allProducts.length) {
+            displayNextBatch();
+        }
+    }
+});
+
+
+
