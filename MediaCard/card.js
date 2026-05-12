@@ -1,20 +1,42 @@
 const video = document.getElementById('cardVideo');
 const card = document.getElementById('mediaCard');
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU6hOGVr3I3278VafOxBuIjIxYxi4OupXDP1rtPDRewlMEHzQjU4c19lJMILWpvHEITg/exec";
 
-function togglePlay() {
-    if (video.paused) {
-        video.play();
-        // تأثير بصري خفيف عند التشغيل (اختياري)
-        card.style.borderColor = "rgba(255, 255, 255, 0.4)";
-    } else {
-        video.pause();
-        // تأثير بصري خفيف عند الإيقاف (اختياري)
-        card.style.borderColor = "rgba(255, 255, 255, 0.1)";
+// دالة جلب البيانات من Google Sheets
+async function fetchVideoData() {
+    try {
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            // نأخذ رابط الفيديو من أول صف في ورقة Videos
+            video.src = data[0].videoUrl;
+            video.load();
+            card.style.display = 'block'; // إظهار الكرت بعد جاهزية البيانات
+        }
+    } catch (error) {
+        console.error("خطأ في الاتصال بـ Google Sheets:", error);
     }
 }
 
-window.addEventListener('load', () => {
-    // الفيديو اللي اخترناه سوا
-    video.src = "https://dn790009.ca.archive.org/0/items/the-looney-tunes-show-season-2-of-2-mkv/The%20Looney%20Tunes%20Show%20-%20S02E01%20-%20Bobcats%20On%20Three.mp4";
-    card.style.display = 'flex';
-});
+// التحكم في التشغيل والإيقاف
+function togglePlay() {
+    if (video.paused) {
+        video.play();
+        card.style.borderColor = "rgba(255, 255, 255, 0.4)";
+        document.getElementById('playBtn').innerText = "⏸";
+    } else {
+        video.pause();
+        card.style.borderColor = "rgba(255, 255, 255, 0.1)";
+        document.getElementById('playBtn').innerText = "▶";
+    }
+}
+
+// التحكم في كتم الصوت
+function toggleMute() {
+    video.muted = !video.muted;
+    document.getElementById('muteBtn').innerText = video.muted ? "🔇" : "🔊";
+}
+
+// التشغيل عند تحميل المكون
+window.addEventListener('load', fetchVideoData);
