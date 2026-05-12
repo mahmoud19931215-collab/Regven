@@ -20,7 +20,7 @@ function createMediaCard(item) {
 }
 
 function sendOrder(productName) {
-    const phone = "9639XXXXXXXX"; // رقم فتون أو رقمك
+    const phone = "963945083365"; // رقم فتون أو رقمك
     const message = `مرحباً، أريد طلب منتج: ${productName}`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
 }
