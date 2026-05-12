@@ -1,5 +1,5 @@
 // ضع هنا رابط الـ Web App الذي حصلت عليه بعد عمل Deploy لكود Apps Script
-const SCRIPT_URL = "أضف_رابط_جوجل_هنا"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU6hOGVr3I3278VafOxBuIjIxYxi4OupXDP1rtPDRewlMEHzQjU4c19lJMILWpvHEITg/exec"; 
 
 async function loadProducts() {
     const container = document.getElementById('products-container');
@@ -42,7 +42,7 @@ async function loadProducts() {
 }
 
 function sendOrder(productName) {
-    const phone = "9639xxxxxxxx"; // ضع رقمك أو رقم فتون هنا
+    const phone = "963944674735"; // ضع رقمك أو رقم فتون هنا
     const message = `مرحباً، أريد طلب: ${productName}`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
 }
