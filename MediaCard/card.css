@@ -1,3 +1,4 @@
+/* تصميم الكرت الزجاجي */
 .media-card-container {
     position: absolute;
     top: 50%;
@@ -13,12 +14,38 @@
     overflow: hidden;
     z-index: 1500;
     box-shadow: 0 30px 60px rgba(0,0,0,0.7);
-    cursor: pointer; /* عشان الزبون يعرف إنه في تفاعل */
+    cursor: pointer;
+    display: none; /* سيتم تفعيله عبر JS بعد تحميل البيانات */
 }
 
 .media-content {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    pointer-events: none; /* عشان الضغطة تروح للـ Container الأساسي */
+    pointer-events: none;
+}
+
+/* طبقة التحكم */
+.yt-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.control-circle {
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.control-circle:hover {
+    transform: scale(1.2);
 }
