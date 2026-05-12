@@ -1,0 +1,43 @@
+/* تنسيق كرت المنتج */
+.media-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    margin: 15px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.media-card:hover {
+    transform: translateY(-5px);
+}
+
+.video-container video {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+.card-details {
+    padding: 10px;
+    text-align: center;
+}
+
+.price {
+    color: #00f2fe;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.order-btn {
+    background: #4facfe;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
